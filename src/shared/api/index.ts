@@ -1,0 +1,1 @@
+export { type PaginatedData, createPaginatedContract } from './paginated-data';

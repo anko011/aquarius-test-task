@@ -1,0 +1,26 @@
+{
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "./src/**/*.test.tsx",
+    "./src/**/index.ts",
+    "./src/vite-env.d.ts"
+  ],
+  "basePath": "/docs",
+  "tsconfig": "./tsconfig.json",
+  "out": "./docs",
+  "name": "Тестовое задание Aquarius / AAT / PerfLab - Документация",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "entryPointStrategy": "expand",
+  "projectDocuments": [
+    "why_this_library.md"
+  ],
+  "hideGenerator": true,
+  "readme": "README.md",
+  "theme": "default",
+  "entryPoints": [
+    "./src/**/*.tsx",
+    "./src/**/*.ts"
+  ]
+}

@@ -1,0 +1,42 @@
+.root {
+    position: relative;
+}
+
+.root:after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.loading:after {
+    pointer-events: auto;
+    opacity: 0.3;
+}
+
+.root :global(.ReactVirtualized__Table__headerRow) {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.header {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    gap: 0.25em;
+    align-items: center;
+    text-wrap: nowrap;
+}
+
+.noData {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}

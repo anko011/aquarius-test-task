@@ -1,0 +1,1 @@
+export { VDBenchStorageMetricsRepository } from './repository';

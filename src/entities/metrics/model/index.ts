@@ -1,0 +1,1 @@
+export { type VDBenchStorageMetric } from './vd-bench-storage-metrics';
