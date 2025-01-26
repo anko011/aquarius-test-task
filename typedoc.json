@@ -14,7 +14,7 @@
   "excludeProtected": true,
   "entryPointStrategy": "expand",
   "projectDocuments": [
-    "why_this_library.md"
+    "architecture.md"
   ],
   "hideGenerator": true,
   "readme": "README.md",
