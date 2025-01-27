@@ -5,10 +5,12 @@ import { SortableTable } from '.';
 
 describe('SortableTable Component with Virtualization', () => {
 	const mockOnChangeSort = vi.fn();
+
 	const mockColumns = {
 		name: { size: 0.5, label: 'Name' },
 		age: { size: 0.5, label: 'Age' },
 	};
+
 	const mockData = [
 		{ name: 'John', age: 25 },
 		{ name: 'Alice', age: 30 },
@@ -16,11 +18,34 @@ describe('SortableTable Component with Virtualization', () => {
 		{ name: 'Charlie', age: 35 },
 		{ name: 'David', age: 40 },
 	];
+
 	const mockSortConfig = { column: 'name', order: 'ASC' } as const;
 
-	afterEach(() => {
-		mockOnChangeSort.mockClear();
+	afterEach(() => mockOnChangeSort.mockClear());
+
+	vi.mock('react-virtualized', async (importOriginal) => ({
+		...await importOriginal<typeof import('react-virtualized')>(),
+		AutoSizer: (props: any) => props.children({ width: 1000, height: 500 }),
+	}));
+
+	it('should renderer with correct data', () => {
+		const { getByText } = render(
+			<SortableTable
+				data={mockData}
+				columns={mockColumns}
+				sortConfig={mockSortConfig}
+				onChangeSort={mockOnChangeSort}
+				viewportHeight={300}
+			/>,
+		);
+
+		mockData.forEach(({ name, age }) => {
+			expect(getByText(name)).toBeInTheDocument();
+			expect(getByText(age)).toBeInTheDocument();
+		});
+
 	});
+
 
 	it('should call onChange Sort when clicking on the column header', () => {
 		render(
