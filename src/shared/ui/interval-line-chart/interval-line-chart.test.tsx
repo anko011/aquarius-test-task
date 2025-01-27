@@ -1,14 +1,9 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
 
 import { IntervalLineChart, YAxisSelector } from '.';
-
-global.ResizeObserver = vi.fn(() => ({
-	observe: vi.fn(),
-	unobserve: vi.fn(),
-	disconnect: vi.fn(),
-}));
+import { Children, cloneElement } from 'react';
 
 describe('IntervalLineChart', () => {
 	const mockData = [
@@ -17,22 +12,44 @@ describe('IntervalLineChart', () => {
 		{ interval: 3, value1: 20, value2: 30 },
 	];
 
-	const mockOnChangeInterval = vi.fn();
 	const mockOnChangeYAxis = vi.fn();
 
-	it('should render a graph with data', () => {
-		render(
+	vi.mock('recharts', async (importOriginal) => ({
+		...await importOriginal<typeof import('recharts')>(),
+		ResponsiveContainer: (props: any) =>
+			Children.map(props.children, child =>
+				cloneElement(child, {
+					width: 100,
+					height: 100,
+					style: {
+						height: '100%',
+						width: '100%',
+						...child.props.style,
+					},
+				})),
+	}));
+
+
+	it('should render a graph', async () => {
+		const { container } = render(
 			<IntervalLineChart<typeof mockData[number], 'interval'>
 				data={mockData}
 				yAxis="value1"
 				xAxis="interval"
-				onChangeInterval={mockOnChangeInterval}
 			/>,
 		);
 
-		expect(screen.getByText('Выберите поле для оси Y:')).toBeInTheDocument();
-		expect(screen.getByText('value1')).toBeInTheDocument();
-		expect(screen.getByText('value2')).toBeInTheDocument();
+		const allLines = container.querySelectorAll('.recharts-line .recharts-line-curve');
+		expect(allLines).toHaveLength(1);
+
+		const line = allLines[0];
+		expect(line).not.toBeNull();
+
+		expect(line).toHaveAttribute(
+			'd',
+			'M80,65L80,35L80,5',
+		);
+
 	});
 
 	it('should change the Y-axis when selecting a new value', () => {
